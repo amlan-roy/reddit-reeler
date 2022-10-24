@@ -1,5 +1,6 @@
+from turtle import pos
 from PIL import Image, ImageDraw, ImageFont
-from utils import Post
+from utils import BodyText, Post
 
 class FONTS:
     Large = ImageFont.truetype('fonts\\IBMPlexSans-Medium.ttf', size=20)
@@ -67,12 +68,95 @@ def generateTitle(post:Post, image:Image, opacity = 1):
     image = addTextInImage(image,topSubreddit,(8,8),FONTS.SmallNormal, color=COLORS.white)
     image = addTextInImage(image,topUsername,(8,23),FONTS.SmallNormal, color=COLORS.gray_1)
 
+    #draw title
+    # Line height - font size
+    bottomPaddingText = 24 - 20
+
+    y = 46
+    wrappedTitleTextList = text_wrap(text=post.title, font=FONTS.Large, max_width=572)
+    for i in wrappedTitleTextList:
+        image = addTextInImage(image, text=i, textCoordinates=(8,y), font=FONTS.Large, color= COLORS.white)
+        y = y + 20 + bottomPaddingText
+    
+    # y = y + bottom padding
+    y = y + 8
+
+    width,_ = image.size
+    image = image.crop((0,0,width,y))
+
     return image
+
+def generateBody(bodyText:BodyText, opacity = 1) -> list:
+    image = Image.new(mode="RGB", size=(600,400), color=COLORS.gray_3)
+
+    username = f"u/{bodyText.username}"
+    image = addTextInImage(image,username,(8,8),FONTS.SmallNormal, color=COLORS.gray_1)
+
+ # splitting the strings with newline and creating the new list with the newline chars as seperate entries (except first newline)
+    # split the texts with newline. 
+    # text_wrap for each element of this new list.
+    # add all these lists in a new list 
+    tempList_1 = []
+    temp = bodyText.text.split("\n")
+    for j  in temp:
+        tempList_1.append(j)
+
+    tempList_2 = []
+    for i in tempList_1:
+        tempList_2 = tempList_2 + text_wrap(i, FONTS.Normal, max_width=572)
+
+    wrappedBodyTextList = tempList_2
+
+    y = 31
+
+    images = []
+    for i in wrappedBodyTextList:
+        # if y + padding bottom + lineheight
+        if y + 8 + 21 > 400:
+            images.append(image)
+            image = False
+        
+        if not image:
+            y = 16
+            image = Image.new(mode="RGB", size=(600,400), color=COLORS.gray_3)
+        
+        image = addTextInImage(image=image, text=i, textCoordinates=(8,y), font=FONTS.Normal, color=COLORS.white)
+        y = y + 21
+    
+    width,_ = image.size
+    if y + 8 <= 400:
+        y = y + 8
+    image = image.crop((0,0,width,y))
+    
+    images.append(image)
+        
+    return images
+
+def generateBodyOrComments(post:Post, comments = []):
+    """
+    @param:
+        comments: list[BodyText]
+    @return
+        images: list[list[Image]]
+            list of list of Image
+    """
+    images = []
+    # images: list(list(Image))
+    if comments:
+        for i in comments:
+            print(i)
+            images.append(generateBody(i))
+    else:
+        tempBodyText = BodyText(username=post.username,text=post.postText, upvotes=post.upvotes)
+        images.append(generateBody(tempBodyText))
+    
+    return images
 
 def generateImages(post:Post,comments= []):
-    image = Image.new(mode="RGB", size=(600,800), color=COLORS.gray_3)
+    image = Image.new(mode="RGB", size=(600,5000), color=COLORS.gray_3)
     image = generateTitle(post=post, image=image)
+    bodyImages = generateBodyOrComments(post=post, comments=comments)
 
-    return image
+    return (image,bodyImages)
     
        
