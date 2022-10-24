@@ -1,7 +1,5 @@
 from gtts import gTTS
-
 import os
-
 
 def generateAudioForText(titleText,bodyTexts=[]):
     """
@@ -10,6 +8,7 @@ def generateAudioForText(titleText,bodyTexts=[]):
     @return
         bodyTexts: [[(Image,text)]]
     """
+
     titleSavePath = "audio/temp/titleAudio.mp3"
     titleAudio = generateAudio(titleText,titleSavePath)
 
@@ -22,8 +21,6 @@ def generateAudioForText(titleText,bodyTexts=[]):
             l=l+1
         i=i+1
 
-
-
 def generateAudio(text,savePath=''):
     language = 'en'
     myobj = gTTS(text=text, lang=language, slow=False, tld='ca')
@@ -31,5 +28,3 @@ def generateAudio(text,savePath=''):
         myobj.save(savePath)
     return myobj
 
-# Playing the converted file
-# os.system("mpg321 audio\\temp\\welcome.mp3")

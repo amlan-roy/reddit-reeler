@@ -93,7 +93,7 @@ def generateTitle(post:Post, image:Image, opacity = 1):
 def generateBody(bodyText:BodyText, opacity = 1) -> list:
     """
         @return:            
-            [(Image,text)],
+            [(Image,text)]
     """
 
     image = Image.new(mode="RGB", size=(600,300), color=COLORS.gray_3)

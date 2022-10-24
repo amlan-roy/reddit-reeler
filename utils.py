@@ -15,21 +15,25 @@ class BodyText:
         self.upvotes = upvotes
 
 tempPost = Post(
-    username='taklabhalu',
-    title='A friend has told me that they want to kill someone.',
-    postText="Im 16, and recently a friend has told me that they're planning to murder one of our classmates, a girl. At first I thought they were joking, but they've talked about it more than once and I'm sure they are serious about it. This friend was in love with said girl, but got rejected and never really moved on. I don't know what to do.  \n\n\n**Update**: I called the girl (where I live it's very late, so meeting in person wasn't an option) and told her everything. It took some convincing, but she finally said she trusted my word and would tell her parents. We plan to talk to the school and the police tomorrow. ",
-    subreddit='offmychest',
-    upvotes='3.2k',
-    commentsCount=222
+    username='AskReddit',
+    title='Android fans, what are the primary reasons why you will never ever switch to an Iphone?',
+    postText="",
+    subreddit='SultanofAmerica',
+    upvotes='46.7k',
+    commentsCount='28.9k'
     )
 
 tempComments = [
     BodyText(
-        username='taklabhalu_1',
-        text="Im 16, and recently a friend has told me that they're planning to murder one of our classmates, a girl. At first I thought they were joking, but they've talked about it more than once and I'm sure they are serious about it. This friend was in love with said girl, but got rejected and never really moved on. I don't know what to do.  \n\n\n**Update**: I called the girl (where I live it's very late, so meeting in person wasn't an option) and told her everything. It took some convincing, but she finally said she trusted my word and would tell her parents. We plan to talk to the school and the police tomorrow. ",
-        upvotes='111'),
+        username='BotJovi35',
+        text="1. Android has direct access to your phone's file explorer \n\n2. Third party apps not on the app store\n\n3. I like the UI better",
+        upvotes='2.3k'),
     BodyText(
-        username='taklabhalu_2',
-        text="Native Russian here.\n\nFrom the circle of my (fairly young) friends and acquaintances, no one is this much delusional to hold him in high regard. Majority of his supporters are post-USSR or/and as old as he is. People who support him are people who watch the TV and biased news sources because they cannot possibly doubt their leader.  As I've said in a different thread, a brainwashed group of people who only can worship a political figure would grow up to worship a political figure.\n\nHe's most likely the guy who's behind all of this, not many can achieve his level of usurping leadership and maintain it with smart shutting down of the opposition. It'll take years for someone to achieve this level again, especially later down the line when the USSR survivors naturally die of old age. Younger people are wiser and weren't as conditioned despite the grip he has on the media outlets. Internet and easy communication makes it hard to shut down all sources of information.\n\nRight now only an idiot wouldn't recognize that this invasion is an absolutely insane decision. We're suffering from it, we, the poor and the middle class, who wants the same as people of Ukraine - we just want peace and to mind our own business. Economics is gonna go to shit, and only we suffer from it. Certain services refuse us or plan to refuse us and choose to actively hurt us because they think it'll potentially make him backpedal. It won't. He never cared about the people. Anyone sane is capable of comprehending that. The only thing he did is terrorize his own people so we won't be able to speak out against him, and it lead to some people straight up hating *all* Russians as if we agree with the decisions. We do not. We do not want war.\n\nI wish I could move out, but I cannot. I'm just a poor student trapped in a horrible situation. I always hated this country and I'm ashamed to live here. So are many of my acquaintances. We're powerless.",
-        upvotes='111'),
+        username='enty6003',
+        text="If I'm paying for an expensive device, I'm going to be the admin",
+        upvotes='6.9k'),
+    BodyText(
+        username='thenewbae',
+        text="A friend once said \"apple treats its phone owners like users, android treats them like admins\" . That's the most succinct version of it. I like being in control. I want to do all the little settings myself and it be easy doing it and plugging to computer being easy and all of it.",
+        upvotes='137'),
 ]
