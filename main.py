@@ -1,3 +1,4 @@
+from audioGeneration import generateAudio, generateAudioForText
 from imageGeneration import generateImages
 from utils import tempPost,tempComments
 
@@ -7,13 +8,20 @@ def testingFunct():
     title = img[0]
     bodyList = img[1]
 
-    title.show()
+    generateAudioForText(title[1],bodyList)
+
+    title[0].save("images/temp/titleImage.jpg")
 
     if bodyList:
+        p=0
         for i in bodyList:
+            q=0
             for j in i:
-                j.show()
-
+                # j[0].show()
+                savePath=f"images/temp/post_no-{p}_{q}.jpg"
+                j[0].save(savePath)
+                q = q + 1
+            p = p + 1
 def main():
     print('in main')
     testingFunct()

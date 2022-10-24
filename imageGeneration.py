@@ -60,6 +60,10 @@ def addTextInImage(image, text,textCoordinates: tuple[int,int],font, color):
     return image
 
 def generateTitle(post:Post, image:Image, opacity = 1):
+    """
+    @return:
+        (image,text)
+    """
     convertedOpacity = int(255 * opacity)
     
     #draw top subreddit and username
@@ -84,10 +88,15 @@ def generateTitle(post:Post, image:Image, opacity = 1):
     width,_ = image.size
     image = image.crop((0,0,width,y))
 
-    return image
+    return (image,post.title)
 
 def generateBody(bodyText:BodyText, opacity = 1) -> list:
-    image = Image.new(mode="RGB", size=(600,400), color=COLORS.gray_3)
+    """
+        @return:            
+            [(Image,text)]
+    """
+
+    image = Image.new(mode="RGB", size=(600,300), color=COLORS.gray_3)
 
     username = f"u/{bodyText.username}"
     image = addTextInImage(image,username,(8,8),FONTS.SmallNormal, color=COLORS.gray_1)
@@ -110,25 +119,28 @@ def generateBody(bodyText:BodyText, opacity = 1) -> list:
     y = 31
 
     images = []
+    text=""
     for i in wrappedBodyTextList:
         # if y + padding bottom + lineheight
-        if y + 8 + 21 > 400:
-            images.append(image)
+        if y + 8 + 21 > 300:
+            images.append((image,text))
             image = False
+            text = ""
         
         if not image:
             y = 16
-            image = Image.new(mode="RGB", size=(600,400), color=COLORS.gray_3)
-        
+            image = Image.new(mode="RGB", size=(600,300), color=COLORS.gray_3)
+            text=""
+        text = text + i
         image = addTextInImage(image=image, text=i, textCoordinates=(8,y), font=FONTS.Normal, color=COLORS.white)
         y = y + 21
     
     width,_ = image.size
-    if y + 8 <= 400:
+    if y + 8 <= 300:
         y = y + 8
     image = image.crop((0,0,width,y))
     
-    images.append(image)
+    images.append((image,text))
         
     return images
 
@@ -137,7 +149,7 @@ def generateBodyOrComments(post:Post, comments = []):
     @param:
         comments: list[BodyText]
     @return
-        images: list[list[Image]]
+        images: list[list[(Image,text)]]
             list of list of Image
     """
     images = []

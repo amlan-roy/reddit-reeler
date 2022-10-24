@@ -15,25 +15,25 @@ class BodyText:
         self.upvotes = upvotes
 
 tempPost = Post(
-    username='taklabhalu',
-    title='A friend has told me that they want to kill someone. A friend has told me that they want to kill someone. A friend has told me that they want to kill someone A friend has told me that they want to kill someone.',
-    postText="Im 16, and recently a friend has told me that they're planning to murder one of our classmates, a girl. At first I thought they were joking, but they've talked about it more than once and I'm sure they are serious about it. This friend was in love with said girl, but got rejected and never really moved on. I don't know what to do.  \n\n\n**Update**: I called the girl (where I live it's very late, so meeting in person wasn't an option) and told her everything. It took some convincing, but she finally said she trusted my word and would tell her parents. We plan to talk to the school and the police tomorrow. ",
-    subreddit='offmychest',
-    upvotes='3.2k',
-    commentsCount=222
+    username='AskReddit',
+    title='Android fans, what are the primary reasons why you will never ever switch to an Iphone?',
+    postText="",
+    subreddit='SultanofAmerica',
+    upvotes='46.7k',
+    commentsCount='28.9k'
     )
 
 tempComments = [
     BodyText(
-        username='taklabhalu_1',
-        text="Im 16, and recently a friend has told me that they're planning to murder one of our classmates, a girl. At first I thought they were joking, but they've talked about it more than once and I'm sure they are serious about it. This friend was in love with said girl, but got rejected and never really moved on. I don't know what to do.  \n\n\n**Update**: I called the girl (where I live it's very late, so meeting in person wasn't an option) and told her everything. It took some convincing, but she finally said she trusted my word and would tell her parents. We plan to talk to the school and the police tomorrow. ",
-        upvotes='111'),
+        username='BotJovi35',
+        text="1. Android has direct access to your phone's file explorer \n\n2. Third party apps not on the app store\n\n3. I like the UI better",
+        upvotes='2.3k'),
     BodyText(
-        username='taklabhalu_2',
-        text="Im 16, and recently a friend has told me that they're planning to murder one of our classmates, a girl. At first I thought they were joking, but they've talked about it more than once and I'm sure they are serious about it. This friend was in love with said girl, but got rejected and never really moved on. I don't know what to do.  \n\n\n**Update**:At first I thought they were joking, but they've talked about it more than once and I'm sure they are serious about it. This friend was in love with said girl, but got rejected and never really moved on. I don't know what to do.  \n\n\n**Update**:At first I thought they were joking, but they've talked about it more than once and I'm sure they are serious about it. This friend was in love with said girl, but got rejected and never really moved on. I don't know what to do.  \n\n\n**Update**: I called the girl (where I live it's very late, so meeting in person wasn't an option) and told her everything. It took some convincing, but she finally said she trusted my word and would tell her parents. We plan to talk to the school and the police tomorrow. ",
-        upvotes='111'),
+        username='enty6003',
+        text="If I'm paying for an expensive device, I'm going to be the admin",
+        upvotes='6.9k'),
     BodyText(
-        username='taklabhalu_3',
-        text="Im 16, and recently a friend has told me that they're planning to murder one of our classmates, a girl. At first I thought they were joking, but they've talked about it more than once and I'm sure they are serious about it. This friend was in love with said girl, but got rejected and never really moved on. I don't know what to do.  \n\n\n**Update**: I called the girl (where I live it's very late, so meeting in person wasn't an option) and told her everything. It took some convincing, but she finally said she trusted my At first I thought they were joking, but they've talked about it more than once and I'm sure they are serious about it. This friend was in love with said girl, but got rejected and never really moved on. I don't know what to do.  \n\n\n**Update**:At first I thought they were joking, but they've talked about it more than once and I'm sure they are serious about it. This friend was in love with said girl, but got rejected and never really moved on. I don't know what to do.  \n\n\n**Update**:At first I thought they were joking, but they've talked about it more than once and I'm sure they are serious about it. This friend was in love with said girl, but got rejected and never really moved on. I don't know what to do.  \n\n\n**Update**:word and would tell her parents. We plan to talk to the school and the police tomorrow. ",
-        upvotes='111'),
+        username='thenewbae',
+        text="A friend once said \"apple treats its phone owners like users, android treats them like admins\" . That's the most succinct version of it. I like being in control. I want to do all the little settings myself and it be easy doing it and plugging to computer being easy and all of it.",
+        upvotes='137'),
 ]
