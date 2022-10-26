@@ -12,8 +12,9 @@ Steps:
 9 Export the video
 '''
 
+from importlib.resources import path
 import os
-from moviepy.editor import AudioFileClip,ImageClip, VideoFileClip,CompositeVideoClip
+from moviepy.editor import AudioFileClip,ImageClip, VideoFileClip,CompositeVideoClip, CompositeAudioClip
 from moviepy.audio.fx.volumex import volumex
 from audioGeneration import generateAudio
 from datetime import datetime
@@ -22,6 +23,24 @@ from tkinter import filedialog
 from tkinter import Tk
 import random
 
+class MusicCategory:
+    sad = 'sad'
+    commentry = 'commentry'
+    mystery = 'mystery'
+
+def clearTemp():
+    audios = os.listdir('temp/audios')
+    for i in audios:
+        os.remove(f"temp/audios/{i}")
+    clips = os.listdir('temp/clips')
+    for i in clips:
+        os.remove(f"temp/clips/{i}")
+    images = os.listdir('temp/images')
+    for i in images:
+        os.remove(f"temp/images/{i}")
+    texts = os.listdir('temp/texts')
+    for i in texts:
+        os.remove(f"temp/texts/{i}")
 
 
 def loadImages():
@@ -60,11 +79,30 @@ def selectRandomBg():
     path = f"temp/videos/bg{random.choice(bgs)}"
     return VideoFileClip(path)
 
+def selectRandomMusic(type,volume=0.3):
+    path = 'temp/bgMusic/' + type
+    bgs = os.listdir(path)
+    path = path + f"/{random.choice(bgs)}"
+    return AudioFileClip(path).fx(volumex,volume)
+
 def makeVideo(
     audioVolume = 1, 
     maxVideoLength = 90,
-    videoSavePath = 'output/'
+    videoSavePath = 'output/',
     ):
+
+    clearTemp()
+
+    inp = input("****************************************\n****************************************\n\nEnter bg music type\n1- Commentry\n2- mystrey\n3- sad \nother- any other\nEnter your choice:")
+    
+    bgMusicType = None
+    if inp == 1:
+        bgMusicType = MusicCategory.commentry
+    if inp == 2:
+        bgMusicType = MusicCategory.mystery
+    if inp == 3:
+        bgMusicType = MusicCategory.sad
+
 
     images = loadImages()
     if not images:
@@ -136,6 +174,15 @@ def makeVideo(
     now = datetime.now()
     now = now.strftime("%d-%m-%Y-%H-%M-%S")
 
+    if(bgMusicType):
+        bgMusic = selectRandomMusic(bgMusicType)
+
+        if bgMusic.duration > video.duration:
+            bgMusic = bgMusic.subclip(0,video.duration)
+
+        bgAudio = CompositeAudioClip([video.audio,bgMusic])
+        video = video.set_audio(bgAudio)
+
     # export video
     video.write_videofile(f"{videoSavePath}/{now}.mp4",
         fps=24,
@@ -143,6 +190,8 @@ def makeVideo(
         preset='ultrafast',
         threads = 16,
         )
+    
+    clearTemp()
 
 
 

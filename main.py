@@ -32,7 +32,7 @@ def testFunct2():
     # inp = input('Please remove unnecessary words from the text files\n\nDid you clean the text files ? (y)\n(press any other key for to exit)')
     # if inp == 'y' or inp =='Y':
     #     saveAudio()
-        saveAudio()
+        # saveAudio()
         makeVideo(audioVolume=1.5)
 
 def main():
