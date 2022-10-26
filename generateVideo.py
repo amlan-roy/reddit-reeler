@@ -14,7 +14,7 @@ Steps:
 
 from importlib.resources import path
 import os
-from moviepy.editor import AudioFileClip,ImageClip, VideoFileClip,CompositeVideoClip, CompositeAudioClip
+from moviepy.editor import AudioFileClip,ImageClip, VideoFileClip,CompositeVideoClip, CompositeAudioClip, concatenate_videoclips
 from moviepy.audio.fx.volumex import volumex
 from audioGeneration import generateAudio
 from datetime import datetime
@@ -22,6 +22,8 @@ from findText import findText
 from tkinter import filedialog
 from tkinter import Tk
 import random
+import numpy as np
+from PIL import Image
 
 class MusicCategory:
     sad = 'sad'
@@ -48,7 +50,10 @@ def loadImages():
     root.withdraw()
 
     root.filename =  filedialog.askopenfilenames(initialdir = "%USERPROFILE%\Downloads",title = "Select file",filetypes = (("jpeg files",["*.jpg","*.jpeg","*.png"]),("all files","*.*")))
-    return [i for i in root.filename]
+    lst = [i for i in root.filename]
+    lst.reverse()
+    # lst = [Image.open(i) for i in lst]
+    return lst
 
 def saveText(text,fileName):
     file = open(f"temp/texts/{fileName}.txt","w+")
@@ -76,32 +81,36 @@ def saveAudio():
 
 def selectRandomBg():
     bgs = os.listdir('temp/videos/bg')
-    path = f"temp/videos/bg{random.choice(bgs)}"
+    path = f"temp/videos/bg/{random.choice(bgs)}"
     return VideoFileClip(path)
 
 def selectRandomMusic(type,volume=0.3):
     path = 'temp/bgMusic/' + type
     bgs = os.listdir(path)
     path = path + f"/{random.choice(bgs)}"
-    return AudioFileClip(path).fx(volumex,volume)
+    audiofile =  AudioFileClip(path)
+    audiofile = audiofile.fx(volumex,volume)
+    return audiofile
 
 def makeVideo(
     audioVolume = 1, 
     maxVideoLength = 90,
     videoSavePath = 'output/',
     ):
+    print('0')
+
 
     clearTemp()
 
-    inp = input("****************************************\n****************************************\n\nEnter bg music type\n1- Commentry\n2- mystrey\n3- sad \nother- any other\nEnter your choice:")
-    
-    bgMusicType = None
-    if inp == 1:
-        bgMusicType = MusicCategory.commentry
-    if inp == 2:
-        bgMusicType = MusicCategory.mystery
-    if inp == 3:
-        bgMusicType = MusicCategory.sad
+    # inp = input("****************************************\n****************************************\n\nEnter bg music type\n1- Commentry\n2- mystrey\n3- sad \nother- any other\nEnter your choice:")
+    print('1')
+    bgMusicType = MusicCategory.sad
+    # if inp == 1:
+    #     bgMusicType = MusicCategory.commentry
+    # if inp == 2:
+    #     bgMusicType = MusicCategory.mystery
+    # if inp == 3:
+    #     bgMusicType = MusicCategory.sad
 
 
     images = loadImages()
@@ -109,9 +118,17 @@ def makeVideo(
         print("No images selected. Try again")
         return
     
+    print('2')
+
     generateTexts(images)
+
+    inp = input('did you edit the text files?(y)\nothers = no')
+    if not (inp == 'y' or inp == 'Y'):
+        return
+
     saveAudio()
     
+    print('3')
 
     audios = os.listdir('temp/audios')
     audios = [f"temp/audios/{i}" for i in audios]
@@ -127,12 +144,14 @@ def makeVideo(
             .fx(volumex,audioVolume)
         )
         duration = audio.duration + 0.5 if index == 0 else audio.duration
+        # clip = ImageClip(np.array(Image.open(images[index])),duration=duration,).set_audio(audio)
         clip = ImageClip(images[index],duration=duration,).set_audio(audio)
         clip = clip.set_fps(24)
         clips.append(clip)
         index = index + 1
 
     video = selectRandomBg()
+    print('4')
     
     aspectRatio = 9/16 # width/height
 
@@ -151,21 +170,38 @@ def makeVideo(
     # max video length is the smaller of provided maxVideoLength and the bgVideo
     maxLength = video.duration if video.duration < maxVideoLength else maxVideoLength
 
+    print('5')
+
+    mainVidClips =[]
     # make clips for each image and audio pair
+    # for i in clips:
+    #     i = i.resize(width=width*0.8)
+    #     x = int(width*0.5 - i.w*0.5)
+    #     y = int(height*0.5 -i.h*0.5)
+    #     i = i.set_pos((x,y))
+    #     video = CompositeVideoClip(
+    #         [video,
+    #         i.set_start(start)]
+    #     )
+    #     if(start + i.duration + 0.3 > maxLength):
+    #         break
+    #     start = start + i.duration + 0.3
+    #     # i.close()
+
     for i in clips:
         i = i.resize(width=width*0.8)
         x = int(width*0.5 - i.w*0.5)
         y = int(height*0.5 -i.h*0.5)
         i = i.set_pos((x,y))
-        video = CompositeVideoClip(
-            [video,
-            i.set_start(start)]
-        )
+        clp = video.subclip(0,i.duration+0.3)
+        clp = CompositeVideoClip([clp,i])
+        mainVidClips.append(clp)
+
         if(start + i.duration + 0.3 > maxLength):
             break
         start = start + i.duration + 0.3
-        # i.close()
     
+    video = concatenate_videoclips(mainVidClips)
     # crop the video if the bg video is longer than total clips length + 0.3 sec
     if start<maxLength:
         video = video.subclip(0,start)
@@ -173,6 +209,9 @@ def makeVideo(
     # current timestamp
     now = datetime.now()
     now = now.strftime("%d-%m-%Y-%H-%M-%S")
+
+    print('6')
+
 
     if(bgMusicType):
         bgMusic = selectRandomMusic(bgMusicType)
@@ -183,12 +222,14 @@ def makeVideo(
         bgAudio = CompositeAudioClip([video.audio,bgMusic])
         video = video.set_audio(bgAudio)
 
+    print('7')
+
     # export video
     video.write_videofile(f"{videoSavePath}/{now}.mp4",
         fps=24,
         remove_temp=True,
         preset='ultrafast',
-        threads = 16,
+        threads = 4,
         )
     
     clearTemp()
