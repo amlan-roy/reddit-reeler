@@ -1,4 +1,3 @@
-from turtle import pos
 from PIL import Image, ImageDraw, ImageFont
 from utils import BodyText, Post
 
