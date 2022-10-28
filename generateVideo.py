@@ -12,10 +12,12 @@ Steps:
 9 Export the video
 '''
 
+from asyncio.log import logger
 from importlib.resources import path
 import os
 from moviepy.editor import AudioFileClip,ImageClip, VideoFileClip,CompositeVideoClip, CompositeAudioClip, concatenate_videoclips
 from moviepy.audio.fx.volumex import volumex
+from moviepy.audio.fx.audio_normalize import audio_normalize
 from audioGeneration import generateAudio
 from datetime import datetime
 from findText import findText
@@ -84,11 +86,12 @@ def selectRandomBg():
     path = f"temp/videos/bg/{random.choice(bgs)}"
     return VideoFileClip(path)
 
-def selectRandomMusic(type,volume=0.3):
+def selectRandomMusic(type,volume=0.07):
     path = 'temp/bgMusic/' + type
     bgs = os.listdir(path)
     path = path + f"/{random.choice(bgs)}"
     audiofile =  AudioFileClip(path)
+    audiofile = audiofile.fx(audio_normalize)
     audiofile = audiofile.fx(volumex,volume)
     return audiofile
 
@@ -96,6 +99,7 @@ def makeVideo(
     audioVolume = 1, 
     maxVideoLength = 90,
     videoSavePath = 'output/',
+    bgMusicType = MusicCategory.commentry
     ):
     print('0')
 
@@ -104,7 +108,7 @@ def makeVideo(
 
     # inp = input("****************************************\n****************************************\n\nEnter bg music type\n1- Commentry\n2- mystrey\n3- sad \nother- any other\nEnter your choice:")
     print('1')
-    bgMusicType = MusicCategory.sad
+    # bgMusicType = MusicCategory.sad
     # if inp == 1:
     #     bgMusicType = MusicCategory.commentry
     # if inp == 2:
@@ -165,7 +169,6 @@ def makeVideo(
     video = video.crop(x_center=video.w/2,y_center=video.h/2,width=width,height=height)
 
     # start timestamp to add first clip
-    start = 0.3
 
     # max video length is the smaller of provided maxVideoLength and the bgVideo
     maxLength = video.duration if video.duration < maxVideoLength else maxVideoLength
@@ -173,39 +176,53 @@ def makeVideo(
     print('5')
 
     mainVidClips =[]
-    # make clips for each image and audio pair
-    # for i in clips:
-    #     i = i.resize(width=width*0.8)
-    #     x = int(width*0.5 - i.w*0.5)
-    #     y = int(height*0.5 -i.h*0.5)
-    #     i = i.set_pos((x,y))
-    #     video = CompositeVideoClip(
-    #         [video,
-    #         i.set_start(start)]
-    #     )
-    #     if(start + i.duration + 0.3 > maxLength):
-    #         break
-    #     start = start + i.duration + 0.3
-    #     # i.close()
 
+    start = 0.0
     for i in clips:
+        print(f"start before: {start}")
+        add_val = i.duration + 0.3
+        if(start + add_val > maxLength):
+            break
         i = i.resize(width=width*0.8)
         x = int(width*0.5 - i.w*0.5)
         y = int(height*0.5 -i.h*0.5)
         i = i.set_pos((x,y))
-        clp = video.subclip(0,i.duration+0.3)
-        clp = CompositeVideoClip([clp,i])
+        clp = video.subclip(start,add_val)
+        clp = CompositeVideoClip([clp,i],use_bgclip=True)
         mainVidClips.append(clp)
 
-        if(start + i.duration + 0.3 > maxLength):
+        
+        if(start + add_val > maxLength):
             break
-        start = start + i.duration + 0.3
+        start = start + add_val
+        print(f"start after: {start}")
     
+    print(f"start after: {start}")
+    index = 0
+    # for i in mainVidClips:
+    #     savepath = f"temp/clips/{index}.mp4"
+    #     i.write_videofile(savepath,
+    #     fps=24,
+    #     remove_temp=True,
+    #     preset='ultrafast',
+    #     threads = 4,
+    #     )
+    #     index = index + 1
+    
+    # videoClips = os.listdir('temp/clips/')
+    # mainVidClips = [VideoFileClip(f"temp/clips/{i}") for i in videoClips]
     video = concatenate_videoclips(mainVidClips)
+
+    print(f"point 1:\nvideo.duration:{video.duration}\nstart:{start}")
     # crop the video if the bg video is longer than total clips length + 0.3 sec
+    duration = maxLength
     if start<maxLength:
-        video = video.subclip(0,start)
+        duration = start
+        if(video.duration<start):
+            duration = video.duration
+        video = video.subclip(0,duration)
     
+    # video = video.set_duration(duration)
     # current timestamp
     now = datetime.now()
     now = now.strftime("%d-%m-%Y-%H-%M-%S")
@@ -216,8 +233,8 @@ def makeVideo(
     if(bgMusicType):
         bgMusic = selectRandomMusic(bgMusicType)
 
-        if bgMusic.duration > video.duration:
-            bgMusic = bgMusic.subclip(0,video.duration)
+        if bgMusic.duration > duration:
+            bgMusic = bgMusic.subclip(0,duration)
 
         bgAudio = CompositeAudioClip([video.audio,bgMusic])
         video = video.set_audio(bgAudio)
@@ -225,12 +242,17 @@ def makeVideo(
     print('7')
 
     # export video
+    print(f"point 2:\nvideo.duration:{video.duration}\nstart:{start}")
+
+
     video.write_videofile(f"{videoSavePath}/{now}.mp4",
         fps=24,
         remove_temp=True,
         preset='ultrafast',
         threads = 4,
         )
+    
+    video.close()
     
     clearTemp()
 
