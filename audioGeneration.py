@@ -46,10 +46,9 @@ def generateAudio(text,savePath,driver='sapi',speed=1.125, voiceModel='male'):
         return myobj
 
     if driver.lower() == 'sapi':
-
         if voiceModel.lower() == 'male':
             engine.setProperty('voice', voices[0].id)
-        if voiceModel.lower() == 'female':
+        else:
             engine.setProperty('voice', voices[1].id)
 
         engine.setProperty('rate', int(200*speed))
