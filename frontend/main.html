@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link href="./styles.css" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
+      integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="leftContainer">
+        <h1 class="selectedImages">Selected Images</h1>
+        <div class="leftContainer__buttons">
+          <button class="deleteAll btn btn-danger" type="button" onclick="">
+            Delete All
+            <i class="fa fa-trash"></i>
+          </button>
+        </div>
+        <ul class="leftContainer__fileNamesContainer list-unstyled">
+          <li>path</li>
+          <li>path</li>
+          <li>path</li>
+          <li>path</li>
+        </ul>
+      </div>
+      <div class="rightContainer px-2 py-1">
+        <div
+          class="rightContainer__buttonContainer d-flex justify-content-between d-flex flex-column"
+        >
+        <div class="input-group">
+
+            <input type="file" class="uploadImagesButton form-control" onclick="" title="Upload Images">
+            <button type="button" class="btn btn-secondary btn-sm">Upload</button>
+        </div>
+
+      </input>
+          <button class="generateVideoButton btn btn-success mt-3 mb-3" onclick="">
+            Generate Videos
+          </button>
+        </div>
+        <div
+          class="displayImageContainer d-flex align-items-center justify-content-around mt-3 mb-3"
+        >
+          <span id="leftButton" class="leftButton clickableIcon">
+            <i class="fa fa-arrow-left fa-5x" ></i>
+          </span>
+          <div class="displayImage">
+            <img src="https://via.placeholder.com/250" alt="placeholder" />
+          </div>
+          <span id="rightButton" class="rightButton clickableIcon">
+            <i class="fa fa-arrow-right fa-5x" ></i>
+          </span>
+        </div>
+        <div class="textBoxContainer form-group">
+<textarea class="form-control mb-3" rows="3" placeholder="Description" required></textarea>
+
+          <button type="button" class="btn btn-secondary btn-sm" onclick="">Save Text</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
