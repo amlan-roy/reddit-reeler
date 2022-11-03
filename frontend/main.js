@@ -5,15 +5,15 @@ const path = require("path");
 function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1200,
+    height: 700,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
     },
   });
 
   // and load the index.html of the app.
-  mainWindow.loadFile("index.html");
+  mainWindow.loadFile("main.html");
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
@@ -36,8 +36,26 @@ app.whenReady().then(() => {
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
 app.on("window-all-closed", function () {
-  if (process.platform !== "darwin") app.quit();
+  app.quit();
 });
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+
+const chooseFile = document.getElementById("imgInput");
+chooseFile.addEventListener("change", function () {
+  getImgData();
+});
+
+function getImgData() {
+  const files = chooseFile.files;
+  console.log(files);
+  // if (files) {
+  //   const fileReader = new FileReader();
+  //   fileReader.readAsDataURL(files);
+  //   fileReader.addEventListener("load", function () {
+  //     imgPreview.style.display = "block";
+  //     imgPreview.innerHTML = '<img src="' + this.result + '" />';
+  //   });
+  // }
+}
