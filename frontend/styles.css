@@ -23,3 +23,9 @@ li {
 .clickableIcon {
   cursor: pointer;
 }
+
+.displayImage {
+  max-width: 250px;
+  max-height: 250px;
+  object-fit: scale-down;
+}

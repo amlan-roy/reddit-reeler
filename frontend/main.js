@@ -9,6 +9,8 @@ function createWindow() {
     height: 700,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
+      nodeIntegration: true,
+      contextIsolation: false,
     },
   });
 
@@ -17,13 +19,15 @@ function createWindow() {
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
+
+  return mainWindow;
 }
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
-  createWindow();
+  const mainWindow = createWindow();
 
   app.on("activate", function () {
     // On macOS it's common to re-create a window in the app when the
@@ -41,21 +45,38 @@ app.on("window-all-closed", function () {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+// const chooseFile = document.getElementById("imgInput");
 
-const chooseFile = document.getElementById("imgInput");
-chooseFile.addEventListener("change", function () {
-  getImgData();
-});
+// chooseFile.addEventListener("change", function () {
+//   getImgData();
+// });
 
-function getImgData() {
-  const files = chooseFile.files;
-  console.log(files);
-  // if (files) {
-  //   const fileReader = new FileReader();
-  //   fileReader.readAsDataURL(files);
-  //   fileReader.addEventListener("load", function () {
-  //     imgPreview.style.display = "block";
-  //     imgPreview.innerHTML = '<img src="' + this.result + '" />';
-  //   });
-  // }
-}
+// function uploadImages() {
+//   console.log("one");
+//   const filePaths = dialog
+//     .showOpenDialog({
+//       properties: ["openFile", "multiSelections"],
+//       filters: [{ name: "Images", extensions: ["jpg", "png", "gif"] }],
+//     })
+//     .then((result) => {
+//       if (result.canceled === false) {
+//         console.log("Selected file paths:");
+//         console.log(result.filePaths);
+//       }
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//     });
+
+//   console.log(filePaths);
+//   const fileNames = [];
+
+//   filePaths.forEach((element) => {
+//     fileNames.push(path.basename(element));
+//   });
+// }
+
+// function getImgData() {
+//   const files = chooseFile.files;
+//   console.log(files);
+// }
