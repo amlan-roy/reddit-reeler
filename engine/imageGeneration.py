@@ -163,7 +163,7 @@ def generateBodyOrComments(post:Post, comments = []):
     # images: list(list(Image))
     if comments:
         for i in comments:
-            print(i)
+            # print(i)
             images.append(generateBody(i))
     else:
         tempBodyText = BodyText(username=post.username,text=post.postText, upvotes=post.upvotes)
