@@ -9,6 +9,7 @@ from findText import findText
 from tkinter import filedialog
 from tkinter import Tk
 import random
+import json
 
 # CONSTANTS
 scrptPath = os.path.realpath(os.path.dirname(__file__))
@@ -230,11 +231,15 @@ def detectTexts(
     return -> [(imgPath,text),(imgPath,text),(imgPath,text),...]
     """
     clearTemp()    
-    return generateTexts(selectedImagesPaths)
-
+    val = generateTexts(selectedImagesPaths)
+    temp = []
+    for i in val:
+        temp.append({"imgPath": str(i[0]),
+            "text": str(i[1])
+        })
+    return temp
 def generateVideo(
-    imgAndTexts,
-    audioModel,
+    imagesAndTexts,
     audioVolume = 1, 
     maxVideoLength = 90,
     videoSavePath = "C:\\Users\\Amlan\\Desktop\\reddit-reels",
@@ -244,6 +249,9 @@ def generateVideo(
     params:
         imgAndTexts: [(imgPath,text),(imgPath,text),(imgPath,text),...]
     """
+
+    temp = json.loads(imagesAndTexts)
+    imgAndTexts = [(i['imgPath'],i['text']) for i in temp]
     saveAudio([i[1] for i in imgAndTexts])
     
     audios = os.listdir(tempAudioFilePath)
