@@ -1,4 +1,11 @@
-from turtle import pos
+"""
+** MODULE NOT USED ***
+
+- This module was written earlier, to generate the images to display from json data.
+- But we are now using the screenshots directly, so this module is redundant right now.
+- We might update this module and use it in future, if we need custom image generation at some point of time.
+"""
+
 from PIL import Image, ImageDraw, ImageFont
 from utils import BodyText, Post
 
@@ -156,7 +163,7 @@ def generateBodyOrComments(post:Post, comments = []):
     # images: list(list(Image))
     if comments:
         for i in comments:
-            print(i)
+            # print(i)
             images.append(generateBody(i))
     else:
         tempBodyText = BodyText(username=post.username,text=post.postText, upvotes=post.upvotes)
